@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { dbService, orderService, Order } from "@/services/db";
+import { dbService, orderService } from "@/services/db";
+import { Order } from "@/types";
 
 interface Customer {
   email: string;
