@@ -19,7 +19,7 @@ const productSchema = z.object({
   stock: z.coerce.number().min(0, "Stock must be positive"),
   imageUrl: z.string().url("Must be a valid URL").optional().or(z.literal("")),
   sizes: z.array(z.string()).min(1, "At least one size is required"),
-  sizePrices: z.record(z.any()).optional(),
+  sizePrices: z.record(z.string(), z.any()).optional(),
   colors: z.array(z.string()).optional(),
 });
 
@@ -63,7 +63,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
   });
 
   const form = useForm<ProductFormValues>({
-    resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema) as any,
     defaultValues: {
       title: initialData?.title || "",
       description: initialData?.description || "",
