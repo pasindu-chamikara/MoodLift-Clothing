@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShoppingBag, Search, User, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/store/useCart";
 import { useAuth } from "@/store/useAuth";
@@ -18,6 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function Navbar() {
+  const pathname = usePathname();
   const items = useCart((state) => state.items);
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
   const { isLoggedIn, user, logout } = useAuth();
@@ -49,12 +51,12 @@ export function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-widest">
-            <Link href="/" className="transition-colors hover:text-brand-luxury">Home</Link>
-            <Link href="/shop" className="transition-colors hover:text-brand-luxury">Shop</Link>
-            <Link href="/size-guide" className="transition-colors hover:text-brand-luxury">Size Guide</Link>
-            <Link href="/about" className="transition-colors hover:text-brand-luxury">About</Link>
-            <Link href="/faq" className="transition-colors hover:text-brand-luxury">FAQ</Link>
-            <Link href="/order" className="transition-colors hover:text-brand-luxury">Order</Link>
+            <Link href="/" className={`transition-colors hover:text-[#A67C52] ${pathname === "/" ? "text-[#A67C52]" : ""}`}>Home</Link>
+            <Link href="/shop" className={`transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/shop") ? "text-[#A67C52]" : ""}`}>Shop</Link>
+            <Link href="/size-guide" className={`transition-colors hover:text-[#A67C52] ${pathname === "/size-guide" ? "text-[#A67C52]" : ""}`}>Size Guide</Link>
+            <Link href="/about" className={`transition-colors hover:text-[#A67C52] ${pathname === "/about" ? "text-[#A67C52]" : ""}`}>About</Link>
+            <Link href="/faq" className={`transition-colors hover:text-[#A67C52] ${pathname === "/faq" ? "text-[#A67C52]" : ""}`}>FAQ</Link>
+            <Link href="/order" className={`transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>Order</Link>
           </nav>
 
           {/* Icons */}
@@ -121,13 +123,13 @@ export function Navbar() {
             </div>
             
             <nav className="flex flex-col gap-6 text-sm font-semibold uppercase tracking-widest text-center">
-              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">Home</Link>
-              <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">Shop</Link>
-              <Link href="/size-guide" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">Size Guide</Link>
-              <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">About</Link>
-              <Link href="/faq" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">FAQ</Link>
-              <Link href="/order" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">Order</Link>
-              <Link href="/account" onClick={() => setIsMobileMenuOpen(false)} className="py-2 border-b border-[#f0f0f0]">Account</Link>
+              <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/" ? "text-[#A67C52]" : ""}`}>Home</Link>
+              <Link href="/shop" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname?.startsWith("/shop") ? "text-[#A67C52]" : ""}`}>Shop</Link>
+              <Link href="/size-guide" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/size-guide" ? "text-[#A67C52]" : ""}`}>Size Guide</Link>
+              <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/about" ? "text-[#A67C52]" : ""}`}>About</Link>
+              <Link href="/faq" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/faq" ? "text-[#A67C52]" : ""}`}>FAQ</Link>
+              <Link href="/order" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>Order</Link>
+              <Link href="/account" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname?.startsWith("/account") ? "text-[#A67C52]" : ""}`}>Account</Link>
             </nav>
           </div>
         </div>
