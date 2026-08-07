@@ -28,7 +28,7 @@ export const useAuth = create<AuthState>()(
       user: null,
       addresses: [],
       login: async (name, email) => {
-        let dbUser = await userService.getUser(email);
+        let dbUser: any = await userService.getUser(email);
         
         if (!dbUser) {
           dbUser = { name, email, addresses: [] };
