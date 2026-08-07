@@ -74,7 +74,7 @@ export default function OrderPage() {
     if (!user?.email) return;
 
     orderService.getOrders().then(allOrders => {
-      const userOrders = allOrders.filter((o: any) => o.customerEmail === user.email);
+      const userOrders = allOrders.filter((o: any) => o.userId === user.email || o.customerEmail === user.email);
 
       const mappedOrders: Order[] = userOrders.map((o: any) => {
         const rawStatus = o.status || "pending";
