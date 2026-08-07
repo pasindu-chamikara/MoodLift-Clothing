@@ -241,6 +241,7 @@ export default function CheckoutPage() {
             </Button>
           </form>
         </div>
+        )}
       </div>
     </div>
   );
