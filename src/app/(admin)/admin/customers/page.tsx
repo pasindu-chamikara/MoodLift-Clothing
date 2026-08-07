@@ -35,11 +35,11 @@ export default function CustomersPage() {
         
         // Aggregate order data for all users (including guests)
         ordersData.forEach(order => {
-          const email = order.customerEmail || "guest@example.com";
+          const email = order.userId || "guest@example.com";
           if (!customerMap.has(email)) {
             customerMap.set(email, {
               email: email,
-              name: order.customerName || "Guest",
+              name: order.shippingAddress?.name || "Guest",
               totalOrders: 0,
               totalSpent: 0
             });
