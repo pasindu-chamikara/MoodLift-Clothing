@@ -29,15 +29,16 @@ export default function CheckoutPage() {
   }, []);
 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email && name && password) {
+    if (email && password && (isLoginMode || name)) {
       setIsLoggingIn(true);
       try {
-        await login(name, email);
+        await login(isLoginMode ? "" : name, email);
       } catch (error) {
-        console.error("Login failed:", error);
+        console.error("Auth failed:", error);
       } finally {
         setIsLoggingIn(false);
       }
@@ -52,7 +53,7 @@ export default function CheckoutPage() {
     const total = subtotal + shippingFee;
 
     const orderData = {
-      userId: user?.email || (formData.get("email") as string) || "guest@example.com",
+      userId: user?.email || "guest@example.com",
       items: items.map(item => ({
         productId: item.productId,
         title: item.title,
@@ -106,14 +107,68 @@ export default function CheckoutPage() {
       <div className="container mx-auto max-w-2xl">
         <h1 className="font-serif text-4xl text-[#1F1F1F] mb-10 text-center">Checkout</h1>
 
-        {!isLoggedIn && (
-          <div className="mb-8 p-4 bg-[#F9F9F9] border border-[#111111]/10 text-sm text-[#6B7280]">
-            Already have an account? <Link href="/account" className="font-semibold text-[#111111] underline hover:text-[#A67C52]">Log in</Link> for faster checkout.
+        {!isLoggedIn ? (
+          <div className="bg-white border border-[#111111]/10 p-8 md:p-12">
+            <h2 className="text-xl font-serif text-[#1F1F1F] mb-2 text-center">
+              {isLoginMode ? "Sign In to Checkout" : "Create Account to Checkout"}
+            </h2>
+            <p className="text-sm text-[#6B7280] mb-8 text-center">
+              {isLoginMode ? "Please sign in to proceed with your checkout." : "Please register to proceed with your checkout."}
+            </p>
+            
+            <form onSubmit={handleAuthSubmit} className="space-y-6">
+              {!isLoginMode && (
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
+                  <input 
+                    type="text"
+                    required={!isLoginMode}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
+                    placeholder="Jane Doe"
+                  />
+                </div>
+              )}
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Email Address</label>
+                <input 
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
+                  placeholder="jane@example.com"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Password</label>
+                <input 
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
+                  placeholder="••••••••"
+                />
+              </div>
+              <Button type="submit" disabled={isLoggingIn} className="w-full bg-[#111111] text-white hover:bg-black rounded-none uppercase tracking-widest text-xs py-6 mt-4">
+                {isLoggingIn ? (isLoginMode ? "Signing In..." : "Creating Account...") : (isLoginMode ? "Sign In" : "Register")}
+              </Button>
+            </form>
+            
+            <div className="mt-8 text-center">
+              <button 
+                type="button" 
+                onClick={() => setIsLoginMode(!isLoginMode)}
+                className="text-xs font-medium text-[#6B7280] hover:text-[#111111] transition-colors underline underline-offset-4 uppercase tracking-widest"
+              >
+                {isLoginMode ? "Don't have an account? Register" : "Already have an account? Sign In"}
+              </button>
+            </div>
           </div>
-        )}
-
-        <div className="bg-white border border-[#111111]/10 p-8 md:p-12">
-          {isLoggedIn && (
+        ) : (
+          <div className="bg-white border border-[#111111]/10 p-8 md:p-12">
             <div className="flex justify-between items-center mb-8 border-b border-[#111111]/10 pb-4">
               <div>
                 <p className="text-sm text-[#6B7280]">Logged in as</p>
@@ -126,18 +181,11 @@ export default function CheckoutPage() {
                 Sign out
               </button>
             </div>
-          )}
 
-          <form onSubmit={handleCheckout} className="space-y-8">
-            <div>
-              <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Contact & Shipping</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {!isLoggedIn && (
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Email Address</label>
-                    <input type="email" name="email" required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" placeholder="jane@example.com" />
-                  </div>
-                )}
+            <form onSubmit={handleCheckout} className="space-y-8">
+              <div>
+                <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Shipping Address</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
                   <input type="text" name="fullName" defaultValue={defaultAddress?.name || user?.name || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
