@@ -210,7 +210,6 @@ function OrderCard({ order, isExpanded, onToggle }: { order: Order; isExpanded: 
         price: p.price,
         imageUrl: p.image,
         size: p.size,
-        color: p.color,
         quantity: p.qty
       });
     });

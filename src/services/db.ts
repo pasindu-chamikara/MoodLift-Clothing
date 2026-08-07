@@ -121,8 +121,8 @@ export const reviewService = {
     const data = { ...review, createdAt: new Date().toISOString() };
     return await dbService.addDocument('reviews', data);
   },
-  async getReviews() {
-    return await dbService.getCollection('reviews');
+  async getReviews(): Promise<Review[]> {
+    return (await dbService.getCollection('reviews')) as Review[];
   }
 };
 

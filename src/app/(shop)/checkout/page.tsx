@@ -52,15 +52,22 @@ export default function CheckoutPage() {
     const total = subtotal + shippingFee;
 
     const orderData = {
-      customerName: formData.get("fullName") as string,
-      customerEmail: user?.email || "guest@example.com",
-      items: items,
+      userId: user?.email || "guest@example.com",
+      items: items.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        size: item.size,
+        price: item.price
+      })),
       totalAmount: total,
       status: "pending" as const,
       shippingAddress: {
+        name: formData.get("fullName") as string,
         street: formData.get("street") as string,
         city: formData.get("city") as string,
-        postalCode: formData.get("postalCode") as string,
+        state: "N/A",
+        zipCode: formData.get("postalCode") as string,
+        country: "N/A",
       },
     };
 
