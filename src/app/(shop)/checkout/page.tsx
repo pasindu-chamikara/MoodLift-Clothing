@@ -52,7 +52,7 @@ export default function CheckoutPage() {
     const total = subtotal + shippingFee;
 
     const orderData = {
-      userId: user?.email || "guest@example.com",
+      userId: user?.email || (formData.get("email") as string) || "guest@example.com",
       items: items.map(item => ({
         productId: item.productId,
         title: item.title,
@@ -106,53 +106,14 @@ export default function CheckoutPage() {
       <div className="container mx-auto max-w-2xl">
         <h1 className="font-serif text-4xl text-[#1F1F1F] mb-10 text-center">Checkout</h1>
 
-        {!isLoggedIn ? (
-          <div className="bg-white border border-[#111111]/10 p-8 md:p-12">
-            <h2 className="text-xl font-serif text-[#1F1F1F] mb-2 text-center">Account Required</h2>
-            <p className="text-sm text-[#6B7280] mb-8 text-center">
-              Please sign in or create an account to proceed with your checkout.
-            </p>
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
-                <input 
-                  type="text"
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
-                  placeholder="Jane Doe"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Email Address</label>
-                <input 
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
-                  placeholder="jane@example.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Password</label>
-                <input 
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
-                  placeholder="••••••••"
-                />
-              </div>
-              <Button type="submit" disabled={isLoggingIn} className="w-full bg-[#111111] text-white hover:bg-black rounded-none uppercase tracking-widest text-xs py-6 mt-4">
-                {isLoggingIn ? "Signing In..." : "Continue to Checkout"}
-              </Button>
-            </form>
+        {!isLoggedIn && (
+          <div className="mb-8 p-4 bg-[#F9F9F9] border border-[#111111]/10 text-sm text-[#6B7280]">
+            Already have an account? <Link href="/account" className="font-semibold text-[#111111] underline hover:text-[#A67C52]">Log in</Link> for faster checkout.
           </div>
-        ) : (
-          <div className="bg-white border border-[#111111]/10 p-8 md:p-12">
+        )}
+
+        <div className="bg-white border border-[#111111]/10 p-8 md:p-12">
+          {isLoggedIn && (
             <div className="flex justify-between items-center mb-8 border-b border-[#111111]/10 pb-4">
               <div>
                 <p className="text-sm text-[#6B7280]">Logged in as</p>
@@ -165,67 +126,73 @@ export default function CheckoutPage() {
                 Sign out
               </button>
             </div>
+          )}
 
-            <form onSubmit={handleCheckout} className="space-y-8">
-              <div>
-                <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Shipping Address</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form onSubmit={handleCheckout} className="space-y-8">
+            <div>
+              <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Contact & Shipping</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {!isLoggedIn && (
                   <div className="space-y-2 md:col-span-2">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
-                    <input type="text" name="fullName" defaultValue={defaultAddress?.name || user?.name || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Email Address</label>
+                    <input type="email" name="email" required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" placeholder="jane@example.com" />
                   </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Telephone Number</label>
-                    <input type="tel" name="phone" defaultValue={defaultAddress?.phone || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" placeholder="+1 (555) 000-0000" />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Street Address</label>
-                    <input type="text" name="street" defaultValue={defaultAddress?.street || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">City</label>
-                    <input type="text" name="city" defaultValue={defaultAddress?.city || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Postal Code</label>
-                    <input type="text" name="postalCode" defaultValue={defaultAddress?.postalCode || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
-                  </div>
+                )}
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
+                  <input type="text" name="fullName" defaultValue={defaultAddress?.name || user?.name || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Telephone Number</label>
+                  <input type="tel" name="phone" defaultValue={defaultAddress?.phone || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" placeholder="+1 (555) 000-0000" />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Street Address</label>
+                  <input type="text" name="street" defaultValue={defaultAddress?.street || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">City</label>
+                  <input type="text" name="city" defaultValue={defaultAddress?.city || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Postal Code</label>
+                  <input type="text" name="postalCode" defaultValue={defaultAddress?.postalCode || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
                 </div>
               </div>
+            </div>
 
-              <div>
-                <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Payment</h3>
-                <div className="bg-[#F9F9F9] border border-[#111111]/10 p-6 text-center">
-                  <p className="text-sm text-[#1F1F1F] font-semibold uppercase tracking-widest mb-2">Cash on Delivery (COD)</p>
-                  <p className="text-xs text-[#6B7280]">You will pay for your order when it is delivered to your address.</p>
-                </div>
+            <div>
+              <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Payment</h3>
+              <div className="bg-[#F9F9F9] border border-[#111111]/10 p-6 text-center">
+                <p className="text-sm text-[#1F1F1F] font-semibold uppercase tracking-widest mb-2">Cash on Delivery (COD)</p>
+                <p className="text-xs text-[#6B7280]">You will pay for your order when it is delivered to your address.</p>
               </div>
+            </div>
 
-              <div className="border-t border-[#111111]/10 pt-6 space-y-4">
-                <div className="flex justify-between text-sm text-[#6B7280]">
-                  <span>Subtotal</span>
-                  <span>${items.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-sm text-[#6B7280]">
-                  <span>Delivery Fee</span>
-                  <span>{shippingFee === 0 ? "Free" : `$${shippingFee.toFixed(2)}`}</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold text-[#1F1F1F] pt-2 border-t border-[#111111]/10">
-                  <span>Total</span>
-                  <span>${(items.reduce((acc, item) => acc + (item.price * item.quantity), 0) + shippingFee).toFixed(2)}</span>
-                </div>
+            <div className="border-t border-[#111111]/10 pt-6 space-y-4">
+              <div className="flex justify-between text-sm text-[#6B7280]">
+                <span>Subtotal</span>
+                <span>Rs. {items.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
               </div>
+              <div className="flex justify-between text-sm text-[#6B7280]">
+                <span>Delivery Fee</span>
+                <span>{shippingFee === 0 ? "Free" : `Rs. ${shippingFee.toFixed(2)}`}</span>
+              </div>
+              <div className="flex justify-between text-lg font-bold text-[#1F1F1F] pt-2 border-t border-[#111111]/10">
+                <span>Total</span>
+                <span>Rs. {(items.reduce((acc, item) => acc + (item.price * item.quantity), 0) + shippingFee).toFixed(2)}</span>
+              </div>
+            </div>
 
-              <Button 
-                type="submit" 
-                disabled={items.length === 0}
-                className="w-full bg-[#111111] text-white hover:bg-black rounded-none uppercase tracking-widest text-xs py-6"
-              >
-                {items.length === 0 ? "Cart is empty" : `Place Order • ${(items.reduce((acc, item) => acc + (item.price * item.quantity), 0) + shippingFee).toFixed(2)}`}
-              </Button>
-            </form>
-          </div>
-        )}
+            <Button 
+              type="submit" 
+              disabled={items.length === 0}
+              className="w-full bg-[#111111] text-white hover:bg-black rounded-none uppercase tracking-widest text-xs py-6"
+            >
+              {items.length === 0 ? "Cart is empty" : `Place Order • Rs. ${(items.reduce((acc, item) => acc + (item.price * item.quantity), 0) + shippingFee).toFixed(2)}`}
+            </Button>
+          </form>
+        </div>
       </div>
     </div>
   );
