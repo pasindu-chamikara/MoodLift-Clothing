@@ -55,6 +55,8 @@ export default function CheckoutPage() {
       userId: user?.email || "guest@example.com",
       items: items.map(item => ({
         productId: item.productId,
+        title: item.title,
+        imageUrl: item.imageUrl,
         quantity: item.quantity,
         size: item.size,
         price: item.price
