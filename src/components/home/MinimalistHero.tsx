@@ -89,13 +89,13 @@ export function MinimalistHero() {
               href="/shop" 
               className="w-full sm:w-auto text-center bg-white text-black lg:bg-[#111111] lg:text-white px-6 py-3 rounded-none text-xs font-medium hover:bg-gray-100 lg:hover:bg-black transition-transform hover:-translate-y-1 shadow-xl lg:shadow-lg"
             >
-              🛍 Shop Now
+              Shop Now
             </Link>
             <Link 
               href="/about" 
               className="w-full sm:w-auto text-center bg-transparent border border-white text-white lg:border-[#111111] lg:text-[#111111] px-6 py-3 rounded-none text-xs font-medium hover:bg-white/10 lg:hover:bg-white transition-transform hover:-translate-y-1 shadow-md lg:shadow-sm backdrop-blur-sm lg:backdrop-blur-none"
             >
-              ✨ Our Story
+              Our Story
             </Link>
           </div>
 
