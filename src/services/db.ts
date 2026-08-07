@@ -122,7 +122,7 @@ export const reviewService = {
     return await dbService.addDocument('reviews', data);
   },
   async getReviews(): Promise<Review[]> {
-    return (await dbService.getCollection('reviews')) as Review[];
+    return (await dbService.getCollection('reviews')) as unknown as Review[];
   }
 };
 
