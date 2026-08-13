@@ -5,8 +5,8 @@ import { useAdminAuth } from "@/store/useAdminAuth";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-export function AdminGuard({ children }: { children: React.ReactNode }) {
-  const { isAdminLoggedIn, login } = useAdminAuth();
+export function AdminGuard({ children, allowedRoles }: { children: React.ReactNode, allowedRoles?: string[] }) {
+  const { isAdminLoggedIn, role, login } = useAdminAuth();
   const [isMounted, setIsMounted] = useState(false);
   
   const [username, setUsername] = useState("");
@@ -78,6 +78,16 @@ export function AdminGuard({ children }: { children: React.ReactNode }) {
             </Button>
           </form>
         </div>
+      </div>
+    );
+  }
+
+  if (allowedRoles && role && !allowedRoles.includes(role)) {
+    return (
+      <div className="min-h-screen bg-[#F8F6F3] flex flex-col items-center justify-center p-4">
+        <h1 className="text-2xl font-serif text-[#1E1E1E] mb-4">Access Denied</h1>
+        <p className="text-[#8B6B61] mb-8">You do not have permission to view this page.</p>
+        <Button onClick={() => window.location.href = '/admin'}>Return to Dashboard</Button>
       </div>
     );
   }

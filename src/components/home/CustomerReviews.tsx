@@ -32,7 +32,7 @@ export function CustomerReviews() {
   }, []);
 
   return (
-    <section className="py-12 md:py-24 bg-brand-neutral">
+    <section className="py-12 md:py-16 bg-brand-neutral">
       <div className="container mx-auto max-w-screen-2xl px-4 md:px-8 text-center">
         <h2 className="mb-12 text-3xl font-light tracking-tight md:text-5xl">What They <span className="font-serif italic text-brand-luxury">Say</span></h2>
         

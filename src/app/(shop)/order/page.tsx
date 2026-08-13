@@ -22,6 +22,7 @@ interface OrderProduct {
 
 interface Order {
   id: string;
+  friendlyId?: string;
   date: string;
   status: OrderStatus;
   total: number;
@@ -95,6 +96,7 @@ export default function OrderPage() {
 
         return {
           id: o.id || Math.random().toString(),
+          friendlyId: o.friendlyId || `#ML-${(o.id || "").slice(0, 5).toUpperCase()}`,
           date: o.createdAt ? new Date(o.createdAt).toLocaleDateString() : "Recently",
           status: (["Pending", "Processing", "Packed", "Shipped", "Delivered", "Cancelled"].includes(statusStr) ? statusStr : "Pending") as OrderStatus,
           total: total,
@@ -125,7 +127,7 @@ export default function OrderPage() {
     if (filter === "Active" && ["Delivered", "Cancelled"].includes(order.status)) return false;
     if (filter === "Completed" && !["Delivered", "Cancelled"].includes(order.status)) return false;
     
-    if (search && !order.id.toLowerCase().includes(search.toLowerCase())) return false;
+    if (search && !(order.friendlyId?.toLowerCase() || order.id).includes(search.toLowerCase())) return false;
     return true;
   });
 
@@ -136,7 +138,7 @@ export default function OrderPage() {
         {/* Header */}
         <div className="mb-10 text-center md:text-left">
           <h1 className="text-3xl md:text-5xl font-serif mb-3 text-[#1E1E1E]">My Orders</h1>
-          <p className="text-[#8B6B61] text-sm md:text-base">Track your purchases and manage your orders.</p>
+          <p className="text-[#555] text-sm md:text-base">Track your purchases and manage your orders.</p>
         </div>
 
         {/* Controls */}
@@ -224,22 +226,13 @@ function OrderCard({ order, isExpanded, onToggle }: { order: Order; isExpanded: 
     switch (status) {
       case "Pending":
         return (
-          <>
-            <Button variant="outline" className="border-[#EF4444] text-[#EF4444] hover:bg-[#EF4444]/10 h-9 px-4 text-xs">
-              Cancel Order
-            </Button>
-            <Button onClick={onToggle} variant="outline" className="border-[#A67C52] text-[#A67C52] hover:bg-[#A67C52]/10 h-9 px-4 text-xs">
-              View Details
-            </Button>
-          </>
+          <Button variant="outline" className="border-[#EF4444] text-[#EF4444] hover:bg-[#EF4444]/10 h-9 px-4 text-xs">
+            Cancel Order
+          </Button>
         );
       case "Processing":
       case "Packed":
-        return (
-          <Button onClick={onToggle} variant="outline" className="border-[#A67C52] text-[#A67C52] hover:bg-[#A67C52]/10 h-9 px-4 text-xs">
-            View Details
-          </Button>
-        );
+        return null;
       case "Shipped":
         return (
           <Button className="bg-[#6366F1] hover:bg-[#4F46E5] text-white h-9 px-4 text-xs">
@@ -277,7 +270,7 @@ function OrderCard({ order, isExpanded, onToggle }: { order: Order; isExpanded: 
         <div className="flex items-center gap-8">
           <div>
             <p className="text-xs text-[#8B6B61] mb-1">Order ID</p>
-            <p className="font-semibold text-[#1E1E1E]">{order.id}</p>
+            <p className="font-semibold text-[#1E1E1E]">{order.friendlyId || order.id}</p>
           </div>
           <div>
             <p className="text-xs text-[#8B6B61] mb-1">Date</p>
@@ -304,7 +297,7 @@ function OrderCard({ order, isExpanded, onToggle }: { order: Order; isExpanded: 
       <div className="md:hidden p-5 border-b border-[#E8E1D9]">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <p className="font-semibold text-[#1E1E1E]">{order.id}</p>
+            <p className="font-semibold text-[#1E1E1E]">{order.friendlyId || order.id}</p>
             <p className="text-xs text-[#8B6B61] mt-1">{order.date}</p>
           </div>
           <div className={`px-2.5 py-1 rounded-none text-xs font-semibold flex items-center gap-1.5 ${getStatusColor(order.status)}`}>
@@ -324,11 +317,11 @@ function OrderCard({ order, isExpanded, onToggle }: { order: Order; isExpanded: 
 
       {/* Product Summary Grid */}
       <div className="p-5 md:p-6 bg-white">
-         <div className="flex flex-col md:flex-row gap-6">
-           <div className="flex-1">
-             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {order.products.slice(0, 3).map(product => (
-                  <div key={product.id} className="flex gap-3 p-3 border border-[#E8E1D9] rounded-none">
+         <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+           <div>
+             <div className="flex flex-wrap gap-4">
+                {order.products.slice(0, 3).map((product, index) => (
+                  <div key={`${product.id}-${index}`} className="flex gap-3 p-3 border border-[#E8E1D9] rounded-none w-full sm:w-72">
                     <div className="relative w-16 h-20 bg-[#F8F6F3] rounded-none overflow-hidden shrink-0">
                       <Image src={product.image} alt={product.name} fill className="object-cover" />
                     </div>
@@ -348,11 +341,11 @@ function OrderCard({ order, isExpanded, onToggle }: { order: Order; isExpanded: 
              )}
            </div>
            
-           <div className="md:w-32 flex flex-col items-end justify-center shrink-0 border-t md:border-t-0 md:border-l border-[#E8E1D9] pt-4 md:pt-0 md:pl-6">
+           <div className="w-full md:w-auto flex flex-col items-center md:items-end justify-center shrink-0 border-t md:border-t-0 md:border-l border-[#E8E1D9] pt-4 md:pt-0 md:pl-6">
               <Button 
                 variant="ghost" 
                 onClick={onToggle}
-                className="w-full flex justify-between md:justify-center items-center text-[#A67C52] hover:bg-[#F8F6F3] hover:text-[#8C6848]"
+                className="w-full md:w-32 flex justify-between md:justify-center items-center text-[#A67C52] hover:bg-[#F8F6F3] hover:text-[#8C6848]"
               >
                 {isExpanded ? (
                   <>Hide <ChevronUp className="w-4 h-4 ml-1 md:ml-2" /></>

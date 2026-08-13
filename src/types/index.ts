@@ -1,5 +1,6 @@
 export interface Product {
   id?: string;
+  sku?: string;
   title: string;
   description: string;
   price: number;
@@ -15,6 +16,7 @@ export interface Product {
 
 export interface Order {
   id?: string;
+  friendlyId?: string;
   userId: string;
   items: {
     productId: string;
@@ -42,4 +44,28 @@ export interface StoreSettings {
   currency: string;
   flatShippingRate: number;
   featuredProductId?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  heroDescription?: string;
+  heroImage?: string;
+  shopTheLookTitle?: string;
+  shopTheLookDescription?: string;
+  shopTheLookImage?: string;
+  promoBannerSubtitle?: string;
+  promoBannerTitle?: string;
+  promoBannerDescription?: string;
+  promoBannerImage?: string;
+  promoBannerImage2?: string;
+  newArrivalsSubtitle?: string;
+  newArrivalsTitle?: string;
+  promoDiscountPercentage?: number;
+  promoDiscountProductIds?: string[];
+}
+
+export interface AdminUser {
+  id?: string;
+  username: string;
+  password?: string;
+  role: 'super_admin' | 'admin' | 'staff';
+  createdAt?: string | Date | any;
 }

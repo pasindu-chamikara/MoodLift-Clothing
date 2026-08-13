@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState, use } from "react";
+import { useEffect, useState } from "react";
 import { ProductCard } from "@/components/shop/ProductCard";
 import { FilterDrawer, FilterState, defaultFilters } from "@/components/shop/FilterDrawer";
 import { productService, settingsService } from "@/services/db";
 import { Product, StoreSettings } from "@/types";
 
-export default function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
-  const { category } = use(params);
+export default function SalePage() {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [settings, setSettings] = useState<StoreSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,14 +18,15 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
       settingsService.getSettings()
     ]).then(([productsData, settingsData]) => {
       setSettings(settingsData);
-      if (category && category.toLowerCase() !== "all" && category.toLowerCase() !== "shop") {
-        setAllProducts(productsData.filter(p => p.category?.toLowerCase() === category.toLowerCase()));
-      } else {
-        setAllProducts(productsData);
-      }
+      
+      // Only show products that are part of the sale
+      const saleProductIds = settingsData?.promoDiscountProductIds || [];
+      const saleProducts = productsData.filter(p => saleProductIds.includes(p.id!));
+      
+      setAllProducts(saleProducts);
       setIsLoading(false);
     }).catch(console.error);
-  }, [category]);
+  }, []);
 
   const products = allProducts.filter(p => {
     // Check stock
@@ -59,24 +59,12 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
     return true;
   });
 
-  const title = category.charAt(0).toUpperCase() + category.slice(1);
-  const saleProductIds = settings?.promoDiscountProductIds || [];
+  const title = "Sale";
   const discountPercentage = settings?.promoDiscountPercentage || 0;
 
   return (
     <div className="bg-transparent min-h-screen">
-      {/* Editorial Header */}
-      {category.toLowerCase() !== 'shop' && (
-        <div className="relative flex w-full flex-col items-center justify-center bg-gradient-to-br from-[#FFF8F7] to-[#F4EEE9] py-6 md:py-8 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#C9A26B]/10 rounded-full blur-[100px] pointer-events-none"></div>
-          <div className="z-10 flex flex-col items-center text-center px-4">
-            <h1 className="font-serif text-5xl italic tracking-tight text-[#1F1F1F] md:text-7xl">{title}</h1>
-            <p className="mt-4 text-[#6B7280] text-xs md:text-sm max-w-md font-sans">
-              Explore our curated selection of premium {title.toLowerCase()} designed for everyday comfort and effortless style.
-            </p>
-          </div>
-        </div>
-      )}
+
 
       <div className="container mx-auto max-w-screen-2xl px-4 py-4 md:px-8">
         {/* Sleek Filter Bar */}
@@ -98,19 +86,16 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
         {isLoading ? (
           <div className="py-20 text-center text-sm text-[#6B7280]">Loading products...</div>
         ) : products.length === 0 ? (
-          <div className="py-20 text-center text-sm text-[#6B7280]">No products found in this category.</div>
+          <div className="py-20 text-center text-sm text-[#6B7280]">No products are currently on sale. Check back later!</div>
         ) : (
           <div className="grid grid-cols-2 gap-x-4 gap-y-16 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 md:gap-x-8">
-            {products.map((product) => {
-              const isOnSale = saleProductIds.includes(product.id!);
-              return (
-                <ProductCard 
-                  key={product.id} 
-                  {...product} 
-                  discountPercentage={isOnSale ? discountPercentage : undefined}
-                />
-              );
-            })}
+            {products.map((product) => (
+              <ProductCard 
+                key={product.id} 
+                {...product} 
+                discountPercentage={discountPercentage}
+              />
+            ))}
           </div>
         )}
       </div>

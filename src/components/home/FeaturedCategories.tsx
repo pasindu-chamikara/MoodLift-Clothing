@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export function FeaturedCategories() {
   return (
-    <section className="bg-brand-neutral py-24">
+    <section className="bg-brand-neutral py-12 md:py-16">
       <div className="container mx-auto max-w-screen-2xl px-4 md:px-8">
         <div className="mb-16 flex flex-col items-center justify-between gap-4 md:flex-row">
           <h2 className="text-3xl font-light tracking-tight md:text-5xl">Shop by <span className="font-serif italic text-brand-luxury">Collection</span></h2>

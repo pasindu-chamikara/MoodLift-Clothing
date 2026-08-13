@@ -44,7 +44,7 @@ export default function InvoicePage() {
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold uppercase tracking-widest text-gray-800">Invoice</h2>
-            <p className="text-sm mt-1"><span className="font-semibold">Invoice No:</span> {order.id}</p>
+            <p className="text-sm mt-1"><span className="font-semibold">Invoice No:</span> {order.friendlyId || `#ML-${(order.id || "").slice(0, 5).toUpperCase()}`}</p>
             <p className="text-sm"><span className="font-semibold">Date:</span> {new Date(order.createdAt).toLocaleDateString()}</p>
           </div>
         </div>

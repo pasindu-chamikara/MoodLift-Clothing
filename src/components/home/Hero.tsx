@@ -1,8 +1,20 @@
 "use client";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { settingsService } from "@/services/db";
+import { StoreSettings } from "@/types";
 
 export function Hero() {
+  const [settings, setSettings] = useState<StoreSettings | null>(null);
+
+  useEffect(() => {
+    async function loadSettings() {
+      const data = await settingsService.getSettings();
+      setSettings(data);
+    }
+    loadSettings();
+  }, []);
   return (
     <section className="relative h-screen w-full overflow-hidden bg-brand-primary">
       {/* Premium Background Image (Printed T-Shirt) */}
@@ -26,14 +38,13 @@ export function Hero() {
           className="max-w-3xl text-white"
         >
           <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-brand-luxury md:text-sm">
-            Comfort Meets Style
+            {settings?.heroSubtitle || "Comfort Meets Style"}
           </p>
-          <h1 className="mb-8 font-sans text-[2.75rem] leading-[1.1] sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tighter">
-            Wear Your <br className="hidden md:block" /> 
-            <span className="font-serif italic text-brand-luxury">Mood</span>
+          <h1 className="mb-8 font-sans text-[2.75rem] leading-[1.1] sm:text-6xl md:text-7xl lg:text-8xl font-light tracking-tighter whitespace-pre-wrap">
+            {settings?.heroTitle || "Wear Your\nMood"}
           </h1>
-          <p className="mb-8 max-w-lg text-sm text-white/80 md:text-base leading-relaxed tracking-wide">
-            Elevate your everyday look with our premium collection of t-shirts. Bold graphics, luxurious comfort.
+          <p className="mb-8 max-w-lg text-base text-white font-medium md:text-lg leading-relaxed tracking-wide drop-shadow-sm whitespace-pre-wrap">
+            {settings?.heroDescription || "Elevate your everyday look with our premium collection of t-shirts. Bold graphics, luxurious comfort."}
           </p>
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
             <Link 

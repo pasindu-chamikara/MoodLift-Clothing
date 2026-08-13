@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function MaterialStory() {
   return (
-    <section className="bg-transparent py-12 md:py-32">
+    <section className="bg-transparent py-12 md:py-16">
       <div className="container mx-auto max-w-screen-xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-8 items-center">
           
@@ -11,10 +11,10 @@ export function MaterialStory() {
               Premium Fabric. <br className="hidden md:block"/>
               <span className="font-serif italic text-[#777]">Everyday Comfort.</span>
             </h2>
-            <p className="text-[#555] text-sm md:text-base leading-relaxed mb-8">
+            <p className="text-[#1E1E1E] text-base md:text-lg leading-relaxed mb-8">
               Every Mood Lift T-shirt is crafted from premium cotton that's soft, breathable, and gentle on your skin.
             </p>
-            <p className="text-[#555] text-sm md:text-base leading-relaxed">
+            <p className="text-[#1E1E1E] text-base md:text-lg leading-relaxed">
               Carefully finished stitching and pre-shrunk fabric help each piece maintain its shape and comfort, so you can enjoy the same perfect fit and confidence every time you wear it.
             </p>
           </div>

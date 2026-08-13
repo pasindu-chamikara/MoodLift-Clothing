@@ -4,8 +4,8 @@ import { useEffect, useState, use } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { productService } from "@/services/db";
-import { Product } from "@/types";
+import { productService, settingsService } from "@/services/db";
+import { Product, StoreSettings } from "@/types";
 import { useCart } from "@/store/useCart";
 import toast from "react-hot-toast";
 
@@ -13,6 +13,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
   const { id } = use(params);
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [settings, setSettings] = useState<StoreSettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
@@ -22,12 +23,14 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
     async function loadData() {
       setIsLoading(true);
       try {
-        const data = await productService.getProduct(id);
+        const [data, allProducts, settingsData] = await Promise.all([
+          productService.getProduct(id),
+          productService.getProducts(),
+          settingsService.getSettings()
+        ]);
         setProduct(data);
-        
-        // Load some products for 'related products' section
-        const allProducts = await productService.getProducts();
         setRelatedProducts(allProducts.filter(p => p.id !== id).slice(0, 5));
+        setSettings(settingsData);
       } catch (error) {
         console.error("Failed to load product:", error);
       } finally {
@@ -45,9 +48,17 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
     return <div className="min-h-screen flex items-center justify-center">Product not found.</div>;
   }
 
-  const currentPrice = selectedSize && product.sizePrices?.[selectedSize] 
+  const basePrice = selectedSize && product.sizePrices?.[selectedSize] 
     ? product.sizePrices[selectedSize] 
     : product.price;
+
+  const saleProductIds = settings?.promoDiscountProductIds || [];
+  const discountPercentage = settings?.promoDiscountPercentage || 0;
+  const isOnSale = saleProductIds.includes(product.id!);
+  
+  const currentPrice = isOnSale && discountPercentage > 0 
+    ? basePrice * (1 - discountPercentage / 100) 
+    : basePrice;
 
   const handleAddToCart = () => {
     if (!product || !selectedSize) return;
@@ -78,22 +89,32 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
                 fill
                 className="object-cover"
               />
+              {isOnSale && discountPercentage > 0 && (
+                <div className="absolute top-4 right-4 bg-[#C9A26B] text-white text-xs font-bold uppercase tracking-widest px-3 py-1 z-10">
+                  Sale -{discountPercentage}%
+                </div>
+              )}
             </div>
           </div>
 
           {/* Product Info */}
           <div className="flex flex-col pt-4 md:pt-0 max-w-md">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A26B] mb-2">
-              Moodlift Collection
-            </span>
             <h1 className="font-serif text-3xl md:text-5xl text-[#1F1F1F] mb-4">
               {product.title}
             </h1>
-            <p className="text-xl font-medium text-[#111111] mb-8">
-              LKR {currentPrice.toLocaleString()}
-            </p>
             
-            <p className="text-[#6B7280] text-sm leading-relaxed mb-8 font-sans">
+            <div className="flex items-center gap-4 mb-8">
+              <p className="text-xl font-medium text-[#111111]">
+                Rs. {Math.round(currentPrice).toLocaleString()}
+              </p>
+              {isOnSale && discountPercentage > 0 && (
+                <p className="text-lg font-medium text-[#6B7280] line-through">
+                  Rs. {Math.round(basePrice).toLocaleString()}
+                </p>
+              )}
+            </div>
+            
+            <p className="text-[#1E1E1E] text-sm md:text-base leading-relaxed mb-8 font-medium">
               {product.description}
             </p>
 
@@ -161,9 +182,16 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
       <div className="container mx-auto max-w-screen-xl px-4 py-8 md:py-12 border-t border-[#111111]/10 mt-8">
         <h2 className="font-serif text-2xl text-[#1F1F1F] mb-6 text-center md:text-left">You May Also Like</h2>
         <div className="grid grid-cols-2 gap-4 gap-y-12 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 md:gap-8">
-          {relatedProducts.map((p) => (
-            <ProductCard key={p.id} {...p} />
-          ))}
+          {relatedProducts.map((p) => {
+            const isRelatedOnSale = saleProductIds.includes(p.id!);
+            return (
+              <ProductCard 
+                key={p.id} 
+                {...p} 
+                discountPercentage={isRelatedOnSale ? discountPercentage : undefined}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

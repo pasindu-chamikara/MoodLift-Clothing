@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { settingsService } from "@/services/db";
+import { StoreSettings } from "@/types";
 
 const heroImages = [
   "/images/her01.jpg",
@@ -16,8 +18,15 @@ const heroImages = [
 
 export function MinimalistHero() {
   const [currentImage, setCurrentImage] = useState(0);
+  const [settings, setSettings] = useState<StoreSettings | null>(null);
 
   useEffect(() => {
+    async function loadSettings() {
+      const data = await settingsService.getSettings();
+      setSettings(data);
+    }
+    loadSettings();
+
     const timer = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % heroImages.length);
     }, 10000);
@@ -45,7 +54,7 @@ export function MinimalistHero() {
               className="absolute inset-0 w-full h-full"
             >
               <Image 
-                src={heroImages[currentImage]} 
+                src={settings?.heroImage || heroImages[currentImage]} 
                 alt={`Premium Women's T-Shirt Model ${currentImage + 1}`} 
                 fill
                 className="object-cover object-top opacity-80 lg:opacity-100"
@@ -69,19 +78,15 @@ export function MinimalistHero() {
           className="w-full flex flex-col justify-center items-center lg:items-start text-center lg:text-left pointer-events-auto lg:pl-12"
         >
           <span className="text-white/80 lg:text-[#C9A26B] text-[10px] lg:text-xs font-semibold uppercase tracking-[0.2em] mb-3 2xl:mb-4 drop-shadow-md lg:drop-shadow-none">
-            New Collection 2026
+            {settings?.heroSubtitle || "New Collection 2026"}
           </span>
           
-          <h1 className="text-[2.5rem] sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-[5rem] font-serif text-white lg:text-[#1F1F1F] leading-[1.1] tracking-tight mb-3 2xl:mb-4 drop-shadow-lg lg:drop-shadow-none">
-            Wear Confidence.<br />
-            <span className="italic">Every Day.</span>
+          <h1 className="text-[2.5rem] sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-[5rem] font-serif text-white lg:text-[#1F1F1F] leading-[1.1] tracking-tight mb-3 2xl:mb-4 drop-shadow-lg lg:drop-shadow-none whitespace-pre-wrap">
+            {settings?.heroTitle || "Wear Confidence.\nEvery Day."}
           </h1>
           
-          <p className="text-white/90 lg:text-[#6B7280] text-xs md:text-sm 2xl:text-base max-w-md leading-relaxed mb-2 font-sans drop-shadow-md lg:drop-shadow-none">
-            Discover premium women's T-shirts crafted with soft fabrics, timeless designs, and effortless style.
-          </p>
-          <p className="text-white/90 lg:text-[#6B7280] text-xs md:text-sm 2xl:text-base max-w-md leading-relaxed mb-6 2xl:mb-8 font-sans drop-shadow-md lg:drop-shadow-none">
-            Minimal, premium women's T-shirts designed for comfort and confidence.
+          <p className="text-white lg:text-[#1E1E1E] text-base md:text-lg 2xl:text-2xl max-w-lg leading-relaxed mb-6 2xl:mb-8 drop-shadow-md lg:drop-shadow-none">
+            {settings?.heroDescription || "Discover premium women's T-shirts crafted with soft fabrics for effortless style and comfort."}
           </p>
           
           <div className="flex flex-col sm:flex-row gap-3 mb-6 2xl:mb-12 w-full sm:w-auto justify-center">

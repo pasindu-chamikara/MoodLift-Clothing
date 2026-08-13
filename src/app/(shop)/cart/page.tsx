@@ -61,7 +61,7 @@ export default function CartPage() {
                         <p className="text-xs text-[#6B7280] mt-1">Size: {item.size}</p>
                       </div>
                       <span className="font-semibold text-sm text-[#1F1F1F]">
-                        ${(item.price).toFixed(2)}
+                        Rs. {(item.price).toFixed(2)}
                       </span>
                     </div>
                     
@@ -104,17 +104,17 @@ export default function CartPage() {
                 <div className="space-y-4 text-sm mb-6">
                   <div className="flex justify-between text-[#6B7280]">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>Rs. {subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-[#6B7280]">
                     <span>Shipping</span>
-                    <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+                    <span>{shipping === 0 ? "Free" : `Rs. ${shipping.toFixed(2)}`}</span>
                   </div>
                 </div>
                 
                 <div className="border-t border-[#111111]/10 pt-4 mb-8 flex justify-between items-end">
                   <span className="text-sm font-semibold uppercase tracking-widest text-[#1F1F1F]">Total</span>
-                  <span className="text-xl font-bold text-[#1F1F1F]">${total.toFixed(2)}</span>
+                  <span className="text-xl font-bold text-[#1F1F1F]">Rs. {total.toFixed(2)}</span>
                 </div>
                 
                 <Link href="/checkout">

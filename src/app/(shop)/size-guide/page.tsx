@@ -3,17 +3,6 @@ import Image from "next/image";
 export default function SizeGuidePage() {
   return (
     <div className="bg-transparent min-h-screen">
-      {/* Header */}
-      <div className="relative flex w-full flex-col items-center justify-center bg-gradient-to-br from-[#FFF8F7] to-[#F4EEE9] py-8 md:py-12 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[#C9A26B]/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="z-10 flex flex-col items-center text-center px-4">
-          <span className="mb-3 text-[10px] lg:text-xs font-semibold uppercase tracking-[0.2em] text-[#C9A26B]">Moodlift Clothing</span>
-          <h1 className="font-serif text-5xl italic tracking-tight text-[#1F1F1F] md:text-6xl">Size Guide</h1>
-          <p className="mt-4 text-[#6B7280] text-xs md:text-sm max-w-md font-sans">
-            Find your perfect fit. Compare your measurements with our sizing chart below.
-          </p>
-        </div>
-      </div>
 
       {/* Main Content */}
       <div className="container mx-auto max-w-screen-md px-4 py-12 md:py-24">

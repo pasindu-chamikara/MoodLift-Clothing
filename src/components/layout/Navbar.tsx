@@ -31,7 +31,7 @@ export function Navbar() {
         <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-8">
           
           {/* Mobile Menu & Logo */}
-          <div className="flex items-center gap-4">
+          <div className="flex w-1/4 md:w-1/3 items-center justify-start gap-4">
             <Button 
               variant="ghost" 
               size="icon" 
@@ -50,17 +50,17 @@ export function Navbar() {
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-widest">
+          <nav className="hidden md:flex md:flex-1 items-center justify-center gap-4 lg:gap-8 text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
             <Link href="/" className={`transition-colors hover:text-[#A67C52] ${pathname === "/" ? "text-[#A67C52]" : ""}`}>Home</Link>
             <Link href="/shop" className={`transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/shop") ? "text-[#A67C52]" : ""}`}>Shop</Link>
-            <Link href="/size-guide" className={`transition-colors hover:text-[#A67C52] ${pathname === "/size-guide" ? "text-[#A67C52]" : ""}`}>Size Guide</Link>
+            <Link href="/size-guide" className={`whitespace-nowrap transition-colors hover:text-[#A67C52] ${pathname === "/size-guide" ? "text-[#A67C52]" : ""}`}>Size Guide</Link>
             <Link href="/about" className={`transition-colors hover:text-[#A67C52] ${pathname === "/about" ? "text-[#A67C52]" : ""}`}>About</Link>
             <Link href="/faq" className={`transition-colors hover:text-[#A67C52] ${pathname === "/faq" ? "text-[#A67C52]" : ""}`}>FAQ</Link>
-            <Link href="/order" className={`transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>Order</Link>
+            <Link href="/order" className={`whitespace-nowrap transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>TRACK ORDER</Link>
           </nav>
 
           {/* Icons */}
-          <div className="flex items-center gap-1 sm:gap-2 text-xs font-semibold uppercase tracking-widest">
+          <div className="flex w-3/4 md:w-1/3 items-center justify-end gap-2 text-xs font-semibold uppercase tracking-widest">
             <DropdownMenu>
               <DropdownMenuTrigger render={<Button variant="ghost" className="hidden lg:inline-flex items-center" />}>
                 <span>Account</span>
@@ -128,7 +128,7 @@ export function Navbar() {
               <Link href="/size-guide" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/size-guide" ? "text-[#A67C52]" : ""}`}>Size Guide</Link>
               <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/about" ? "text-[#A67C52]" : ""}`}>About</Link>
               <Link href="/faq" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname === "/faq" ? "text-[#A67C52]" : ""}`}>FAQ</Link>
-              <Link href="/order" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>Order</Link>
+              <Link href="/order" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>Track Order</Link>
               <Link href="/account" onClick={() => setIsMobileMenuOpen(false)} className={`py-2 border-b border-[#f0f0f0] ${pathname?.startsWith("/account") ? "text-[#A67C52]" : ""}`}>Account</Link>
             </nav>
           </div>

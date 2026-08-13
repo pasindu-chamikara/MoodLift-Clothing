@@ -43,7 +43,7 @@ export const dbService = {
   }
 };
 
-import { Product, Order, StoreSettings } from "@/types";
+import { Product, Order, StoreSettings, AdminUser } from '@/types';
 
 export const productService = {
   async getProducts(): Promise<Product[]> {
@@ -73,7 +73,13 @@ export const orderService = {
     return (await dbService.getDocument('orders', id)) as Order | null;
   },
   async addOrder(order: Omit<Order, 'id'>): Promise<string> {
-    const data = { ...order, createdAt: new Date().toISOString() };
+    const allOrders = await this.getOrders();
+    const now = new Date();
+    const yy = now.getFullYear().toString().slice(-2);
+    const mm = (now.getMonth() + 1).toString().padStart(2, '0');
+    const orderNum = (allOrders.length + 1).toString().padStart(4, '0');
+    const friendlyId = `#ML${yy}${mm}${orderNum}`;
+    const data = { ...order, friendlyId, createdAt: new Date().toISOString() };
     return await dbService.addDocument('orders', data);
   },
   async updateOrderStatus(id: string, status: Order['status']): Promise<void> {
@@ -155,9 +161,15 @@ export const messageService = {
 
 export const adminService = {
   async getAdmins() {
-    return await dbService.getCollection('admins');
+    const admins = await dbService.getCollection('admins');
+    return admins.map((admin: any) => {
+      if (admin.username === 'admin@moodlift.com') {
+        return { ...admin, role: 'super_admin' };
+      }
+      return admin;
+    });
   },
-  async verifyAdmin(username: string, password: string): Promise<boolean> {
+  async verifyAdmin(username: string, password: string): Promise<any> {
     try {
       let admins = await this.getAdmins();
       
@@ -165,16 +177,56 @@ export const adminService = {
       if (admins.length === 0) {
         await dbService.setDocument('admins', 'default_admin', {
           username: 'admin',
-          password: 'admin123'
+          password: 'admin123',
+          role: 'super_admin',
+          createdAt: new Date().toISOString()
         });
         admins = await this.getAdmins();
       }
 
       const admin = admins.find((a: any) => a.username === username && a.password === password);
-      return !!admin;
+      
+      // Force admin@moodlift.com to have super_admin role for flexibility
+      if (admin && admin.username === 'admin@moodlift.com') {
+        admin.role = 'super_admin';
+      }
+      
+      return admin || null;
     } catch (error) {
       console.error("Error verifying admin in Firestore", error);
-      return false;
+      return null;
     }
+  },
+  async createAdmin(adminData: Omit<AdminUser, 'id'>) {
+    const newAdmin = {
+      ...adminData,
+      createdAt: new Date().toISOString()
+    };
+    return await dbService.addDocument('admins', newAdmin);
+  },
+  async updateAdmin(id: string, updates: Partial<AdminUser>) {
+    await dbService.updateDocument('admins', id, updates);
+  },
+  async deleteAdmin(id: string) {
+    await dbService.deleteDocument('admins', id);
+  }
+};
+
+export interface Subscriber {
+  id?: string;
+  email: string;
+  subscribedAt?: string;
+}
+
+export const subscriberService = {
+  async addSubscriber(email: string) {
+    const data = { email, subscribedAt: new Date().toISOString() };
+    return await dbService.addDocument('subscribers', data);
+  },
+  async getSubscribers(): Promise<Subscriber[]> {
+    return (await dbService.getCollection('subscribers')) as Subscriber[];
+  },
+  async deleteSubscriber(id: string) {
+    await dbService.deleteDocument('subscribers', id);
   }
 };

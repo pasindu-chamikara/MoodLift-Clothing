@@ -3,6 +3,7 @@ import { ShopTheLook } from "@/components/home/ShopTheLook";
 import { MaterialStory } from "@/components/home/MaterialStory";
 import { ProductRow } from "@/components/home/ProductRow";
 import { CustomerReviews } from "@/components/home/CustomerReviews";
+import { SplitSaleBanner } from "@/components/home/Banners";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <MinimalistHero />
       <ShopTheLook />
       <ProductRow title="Best Sellers" />
+      <SplitSaleBanner />
       <MaterialStory />
       <ProductRow title="New Arrivals" />
       <CustomerReviews />

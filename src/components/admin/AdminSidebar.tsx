@@ -10,9 +10,13 @@ import {
   Users,
   MessageSquare,
   MessageCircle,
+  Mail,
   LogOut,
   Menu,
-  X
+  X,
+  Settings,
+  Archive,
+  UserCog
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -21,15 +25,23 @@ import { useAdminAuth } from '@/store/useAdminAuth';
 export function AdminSidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const { logout } = useAdminAuth();
+  const { logout, role, username } = useAdminAuth();
 
   const navItems = [
     { name: 'Overview', href: '/admin', icon: LayoutDashboard },
     { name: 'Orders', href: '/admin/orders', icon: ShoppingCart },
     { name: 'Products', href: '/admin/products', icon: Package },
+    { name: 'Inventory', href: '/admin/inventory', icon: Archive },
     { name: 'Customers', href: '/admin/customers', icon: Users },
     { name: 'Messages', href: '/admin/messages', icon: MessageSquare },
     { name: 'Feedback', href: '/admin/feedback', icon: MessageCircle },
+    { name: 'Subscribers', href: '/admin/subscribers', icon: Mail },
+    ...(role === 'super_admin' ? [
+      { name: 'Staff', href: '/admin/staff', icon: UserCog }
+    ] : []),
+    ...(['super_admin', 'admin'].includes(role as string) ? [
+      { name: 'Settings', href: '/admin/settings', icon: Settings }
+    ] : []),
   ];
 
   return (
@@ -94,6 +106,13 @@ export function AdminSidebar() {
         </div>
         
         <div className="border-t border-border p-4 shrink-0">
+          {username && (
+            <div className="mb-4 px-3 flex flex-col">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Logged in as</span>
+              <span className="text-sm font-semibold truncate" title={username}>{username}</span>
+              <span className="text-xs capitalize text-muted-foreground">{role?.replace('_', ' ')}</span>
+            </div>
+          )}
           <button 
             onClick={logout}
             className="flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"

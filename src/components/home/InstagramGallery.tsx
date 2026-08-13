@@ -10,7 +10,7 @@ export function InstagramGallery() {
   ];
 
   return (
-    <section className="py-24">
+    <section className="py-12 md:py-16">
       <div className="container mx-auto max-w-screen-2xl px-4 md:px-8 text-center mb-12">
         <h2 className="mb-4 text-3xl font-light tracking-tight md:text-5xl">Shop our <span className="font-serif italic text-brand-luxury">Instagram</span></h2>
         <p className="text-sm text-muted-foreground">@moodliftclothing</p>

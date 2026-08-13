@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { SplitSaleBanner } from "@/components/home/Banners";
+
 import { motion } from "framer-motion";
 
 export default function AboutContent() {
@@ -164,8 +164,6 @@ export default function AboutContent() {
         </div>
       </section>
 
-      {/* Reusable Banners Component */}
-      <SplitSaleBanner />
 
       {/* Simple Text CTA */}
       <section className="w-full py-8 md:py-12 bg-transparent border-t border-[#111111]/10 text-center overflow-hidden">

@@ -14,6 +14,7 @@ import { storage } from "@/lib/firebase/config";
 
 const productSchema = z.object({
   title: z.string().min(2, "Title is required"),
+  sku: z.string().optional(),
   description: z.string().min(10, "Description is required"),
   price: z.coerce.number().min(0, "Price must be positive"),
   stock: z.coerce.number().min(0, "Stock must be positive"),
@@ -66,6 +67,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
     resolver: zodResolver(productSchema) as any,
     defaultValues: {
       title: initialData?.title || "",
+      sku: initialData?.sku || "",
       description: initialData?.description || "",
       price: initialData?.price || 0,
       stock: initialData?.stock || 0,
@@ -75,6 +77,23 @@ export function ProductForm({ initialData }: ProductFormProps) {
       colors: initialData?.colors || [],
     },
   });
+
+  const generateSku = () => {
+    const title = form.getValues("title");
+    if (!title || title.trim() === "") {
+      toast.error("Please enter a product title first.");
+      return;
+    }
+    const words = title.trim().split(/\s+/);
+    let prefix = "";
+    if (words.length >= 2) {
+      prefix = `${words[0].substring(0, 3).toUpperCase()}-${words[1].substring(0, 3).toUpperCase()}`;
+    } else {
+      prefix = words[0].substring(0, 3).toUpperCase();
+    }
+    const randomNum = Math.floor(Math.random() * 900) + 100; // 100-999
+    form.setValue("sku", `${prefix}-${randomNum}`, { shouldValidate: true, shouldDirty: true });
+  };
 
   async function onSubmit(data: ProductFormValues) {
     setIsLoading(true);
@@ -112,7 +131,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
           storeName: "",
           contactEmail: "",
           supportPhone: "",
-          currency: "USD",
+          currency: "LKR",
           flatShippingRate: 0,
         };
         
@@ -136,16 +155,39 @@ export function ProductForm({ initialData }: ProductFormProps) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
       <div className="space-y-4">
-        <div>
-          <label className="text-sm font-medium">Title</label>
-          <input 
-            {...form.register("title")} 
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-            placeholder="Product Title"
-          />
-          {form.formState.errors.title && (
-            <p className="text-sm text-destructive mt-1">{form.formState.errors.title.message}</p>
-          )}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-sm font-medium">Title</label>
+            <input 
+              {...form.register("title")} 
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="Product Title"
+            />
+            {form.formState.errors.title && (
+              <p className="text-sm text-destructive mt-1">{form.formState.errors.title.message}</p>
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-medium">Product Number (SKU)</label>
+              <button 
+                type="button" 
+                onClick={generateSku}
+                className="text-xs text-brand-primary font-semibold hover:underline"
+              >
+                Auto-Generate
+              </button>
+            </div>
+            <input 
+              {...form.register("sku")} 
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="e.g. TEE-OVS-001"
+            />
+            {form.formState.errors.sku && (
+              <p className="text-sm text-destructive mt-1">{form.formState.errors.sku.message}</p>
+            )}
+          </div>
         </div>
 
         <div>
@@ -162,7 +204,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="text-sm font-medium">Price ($)</label>
+            <label className="text-sm font-medium">Price (LKR)</label>
             <input 
               type="number"
               step="0.01"

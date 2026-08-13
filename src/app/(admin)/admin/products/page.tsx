@@ -74,6 +74,7 @@ export default function ProductsPage() {
             <thead className="[&_tr]:border-b">
               <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                 <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground w-16">Image</th>
+                <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Product No.</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Title</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Price</th>
                 <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Stock</th>
@@ -101,6 +102,7 @@ export default function ProductsPage() {
                         )}
                       </div>
                     </td>
+                    <td className="p-4 align-middle text-muted-foreground text-xs font-mono">{product.sku || 'N/A'}</td>
                     <td className="p-4 align-middle font-medium">{product.title}</td>
                     <td className="p-4 align-middle">${product.price.toFixed(2)}</td>
                     <td className="p-4 align-middle">{product.stock}</td>
