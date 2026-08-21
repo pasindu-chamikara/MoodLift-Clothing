@@ -27,45 +27,46 @@ export function Navbar() {
   
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-8">
+      <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md transition-all duration-300">
+        <div className="container mx-auto flex h-20 max-w-screen-2xl items-center justify-between px-4 md:px-12">
           
           {/* Mobile Menu & Logo */}
           <div className="flex w-1/4 md:w-1/3 items-center justify-start gap-4">
             <Button 
               variant="ghost" 
               size="icon" 
-              className="md:hidden"
+              className="md:hidden hover:bg-transparent hover:text-[#A67C52] transition-colors duration-300"
               onClick={() => setIsMobileMenuOpen(true)}
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-5 w-5" strokeWidth={1.25} />
               <span className="sr-only">Toggle menu</span>
             </Button>
-            <Link href="/" className="flex items-center space-x-2">
-              <Image src="/images/logo.jpg" alt="Moodlift Logo" width={32} height={32} className="rounded-sm" />
-              <span className="text-xl font-bold tracking-tighter sm:text-2xl">
+            <Link href="/" className="group flex items-center space-x-3">
+              <Image src="/images/logo.jpg" alt="Moodlift Logo" width={32} height={32} className="rounded-sm transition-transform duration-500 group-hover:scale-105" />
+              <span className="text-xl font-serif font-bold tracking-tight sm:text-2xl transition-colors duration-300 group-hover:text-[#A67C52]">
                 MOODLIFT
               </span>
             </Link>
           </div>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex md:flex-1 items-center justify-center gap-4 lg:gap-8 text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
-            <Link href="/" className={`transition-colors hover:text-[#A67C52] ${pathname === "/" ? "text-[#A67C52]" : ""}`}>Home</Link>
-            <Link href="/shop" className={`transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/shop") ? "text-[#A67C52]" : ""}`}>Shop</Link>
-            <Link href="/size-guide" className={`whitespace-nowrap transition-colors hover:text-[#A67C52] ${pathname === "/size-guide" ? "text-[#A67C52]" : ""}`}>Size Guide</Link>
-            <Link href="/about" className={`transition-colors hover:text-[#A67C52] ${pathname === "/about" ? "text-[#A67C52]" : ""}`}>About</Link>
-            <Link href="/faq" className={`transition-colors hover:text-[#A67C52] ${pathname === "/faq" ? "text-[#A67C52]" : ""}`}>FAQ</Link>
-            <Link href="/order" className={`whitespace-nowrap transition-colors hover:text-[#A67C52] ${pathname?.startsWith("/order") ? "text-[#A67C52]" : ""}`}>TRACK ORDER</Link>
+          <nav className="hidden md:flex md:flex-1 items-center justify-center gap-8 lg:gap-12 text-xs font-medium uppercase tracking-[0.2em] whitespace-nowrap">
+            <Link href="/" className={`relative transition-all duration-300 hover:text-[#A67C52] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-[#A67C52] after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100 ${pathname === "/" ? "text-[#A67C52] after:scale-x-100 after:origin-bottom-left" : ""}`}>Home</Link>
+            <Link href="/shop" className={`relative transition-all duration-300 hover:text-[#A67C52] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-[#A67C52] after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100 ${pathname?.startsWith("/shop") ? "text-[#A67C52] after:scale-x-100 after:origin-bottom-left" : ""}`}>Shop</Link>
+            <Link href="/size-guide" className={`relative whitespace-nowrap transition-all duration-300 hover:text-[#A67C52] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-[#A67C52] after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100 ${pathname === "/size-guide" ? "text-[#A67C52] after:scale-x-100 after:origin-bottom-left" : ""}`}>Size Guide</Link>
+            <Link href="/about" className={`relative transition-all duration-300 hover:text-[#A67C52] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-[#A67C52] after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100 ${pathname === "/about" ? "text-[#A67C52] after:scale-x-100 after:origin-bottom-left" : ""}`}>About</Link>
+            <Link href="/faq" className={`relative transition-all duration-300 hover:text-[#A67C52] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-[#A67C52] after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100 ${pathname === "/faq" ? "text-[#A67C52] after:scale-x-100 after:origin-bottom-left" : ""}`}>FAQ</Link>
+            <Link href="/order" className={`relative whitespace-nowrap transition-all duration-300 hover:text-[#A67C52] after:absolute after:-bottom-1 after:left-0 after:h-[1px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-[#A67C52] after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100 ${pathname?.startsWith("/order") ? "text-[#A67C52] after:scale-x-100 after:origin-bottom-left" : ""}`}>Track Order</Link>
           </nav>
 
           {/* Icons */}
-          <div className="flex w-3/4 md:w-1/3 items-center justify-end gap-2 text-xs font-semibold uppercase tracking-widest">
+          <div className="flex w-3/4 md:w-1/3 items-center justify-end gap-2 md:gap-4 text-xs font-medium uppercase tracking-[0.2em]">
             <DropdownMenu>
-              <DropdownMenuTrigger render={<Button variant="ghost" className="hidden lg:inline-flex items-center" />}>
-                <span>Account</span>
+              <DropdownMenuTrigger render={<Button variant="ghost" size="icon" className="hidden lg:inline-flex items-center hover:bg-transparent hover:text-[#A67C52] transition-colors duration-300" />}>
+                <User className="h-5 w-5" strokeWidth={1.25} />
+                <span className="sr-only">Account</span>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 rounded-none border-[#111111]/10 bg-white">
+              <DropdownMenuContent align="end" className="w-48 rounded-none border-[#111111]/10 bg-white shadow-md animate-in fade-in-80 zoom-in-95">
                 {isLoggedIn ? (
                   <DropdownMenuGroup>
                     <DropdownMenuLabel className="font-normal text-xs text-[#6B7280]">
@@ -96,8 +97,14 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
             <Link href="/cart">
-              <Button variant="ghost" className="flex items-center">
-                <span>Cart ({totalItems})</span>
+              <Button variant="ghost" size="icon" className="relative flex items-center hover:bg-transparent hover:text-[#A67C52] transition-colors duration-300">
+                <ShoppingBag className="h-5 w-5" strokeWidth={1.25} />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-[16px] w-[16px] items-center justify-center rounded-full bg-[#A67C52] text-[10px] font-bold text-white shadow-sm">
+                    {totalItems}
+                  </span>
+                )}
+                <span className="sr-only">Cart</span>
               </Button>
             </Link>
           </div>

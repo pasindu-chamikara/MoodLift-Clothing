@@ -21,6 +21,7 @@ import {
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAdminAuth } from '@/store/useAdminAuth';
+import { OrderNotifications } from '@/components/admin/OrderNotifications';
 
 export function AdminSidebar() {
   const pathname = usePathname();
@@ -49,9 +50,12 @@ export function AdminSidebar() {
       {/* Mobile Top Bar */}
       <div className="md:hidden flex items-center justify-between bg-card border-b border-border p-4">
         <span className="text-lg font-bold tracking-tight">MoodLift Admin</span>
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
-          <Menu className="h-6 w-6" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <OrderNotifications />
+          <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
+            <Menu className="h-6 w-6" />
+          </Button>
+        </div>
       </div>
 
       {/* Mobile Overlay */}
@@ -64,7 +68,7 @@ export function AdminSidebar() {
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col bg-card border-r border-border transition-transform duration-300 ease-in-out md:static md:translate-x-0",
+        "fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col bg-card border-r border-border transition-transform duration-300 ease-in-out md:relative md:translate-x-0",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         {/* Mobile Sidebar Header */}
@@ -76,9 +80,12 @@ export function AdminSidebar() {
         </div>
         
         {/* Desktop Sidebar Header */}
-        <div className="hidden md:flex flex-col justify-center h-20 border-b border-border px-6 shrink-0">
-          <span className="text-lg font-bold tracking-tight">MoodLift</span>
-          <span className="text-sm text-muted-foreground">Admin Workspace</span>
+        <div className="hidden md:flex flex-row items-center justify-between h-20 border-b border-border px-6 shrink-0">
+          <div className="flex flex-col justify-center">
+            <span className="text-lg font-bold tracking-tight">MoodLift</span>
+            <span className="text-sm text-muted-foreground">Admin Workspace</span>
+          </div>
+          <OrderNotifications />
         </div>
 
         <div className="flex-1 overflow-y-auto py-4">

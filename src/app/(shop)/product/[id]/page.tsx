@@ -71,8 +71,7 @@ export default function ProductDetailsPage({ params }: { params: Promise<{ id: s
       imageUrl: product.imageUrl || "/images/placeholder.jpg",
       quantity: quantity
     });
-    
-    toast.success(`${quantity} ${product.title} added to cart!`);
+    // Global toast is handled in useCart.ts
   };
 
   return (

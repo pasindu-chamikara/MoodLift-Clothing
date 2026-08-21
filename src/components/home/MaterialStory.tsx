@@ -7,14 +7,14 @@ export function MaterialStory() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-8 items-center">
           
           <div className="order-1 max-w-lg md:pr-12 flex flex-col items-center text-center px-4 md:px-8 mx-auto">
-            <h2 className="text-3xl md:text-5xl font-light text-[#222] mb-6 tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-serif text-[#1A1A1A] mb-6 tracking-tight">
               Premium Fabric. <br className="hidden md:block"/>
-              <span className="font-serif italic text-[#777]">Everyday Comfort.</span>
+              <span className="font-serif italic text-[#C9A26B]">Everyday Comfort.</span>
             </h2>
-            <p className="text-[#1E1E1E] text-base md:text-lg leading-relaxed mb-8">
+            <p className="text-[#444] font-light text-base md:text-lg leading-relaxed mb-8">
               Every Mood Lift T-shirt is crafted from premium cotton that's soft, breathable, and gentle on your skin.
             </p>
-            <p className="text-[#1E1E1E] text-base md:text-lg leading-relaxed">
+            <p className="text-[#444] font-light text-base md:text-lg leading-relaxed">
               Carefully finished stitching and pre-shrunk fabric help each piece maintain its shape and comfort, so you can enjoy the same perfect fit and confidence every time you wear it.
             </p>
           </div>
@@ -25,6 +25,7 @@ export function MaterialStory() {
                 src="/images/premium1.jpg"
                 alt="Premium Fabric"
                 fill
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover"
               />
             </div>
@@ -33,6 +34,7 @@ export function MaterialStory() {
                 src="/images/premium2.jpg"
                 alt="Everyday Comfort"
                 fill
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover"
               />
             </div>

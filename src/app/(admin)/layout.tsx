@@ -1,5 +1,6 @@
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminGuard } from "@/components/admin/AdminGuard";
+import { AdminNotificationListener } from "@/components/admin/AdminNotificationListener";
 
 export default function AdminLayout({
   children,
@@ -8,6 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <AdminGuard>
+      <AdminNotificationListener />
       <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-[#f9f9f9]">
         <AdminSidebar />
         <main className="flex-1 overflow-y-auto w-full">

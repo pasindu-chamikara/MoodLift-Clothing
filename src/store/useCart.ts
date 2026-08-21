@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import toast from 'react-hot-toast';
 
 export interface CartItem {
   id: string; // Combine product id and size, e.g. "prod123-XL"
@@ -43,6 +44,8 @@ export const useCart = create<CartState>()(
             items: [...state.items, { ...restOfItem, id: cartItemId, quantity: qtyToAdd }]
           };
         });
+        
+        toast.success("Item added to cart successfully!");
       },
       
       removeItem: (id) => {

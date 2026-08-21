@@ -25,19 +25,18 @@ export function NewArrivalsBanner() {
       />
       <div className="absolute inset-0 bg-black/40 transition-colors duration-[1s] group-hover:bg-black/50" />
       <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
-        <p className="text-white/90 text-xs tracking-[0.2em] uppercase mb-2 font-semibold">
+        <p className="text-white/80 text-xs tracking-[0.2em] uppercase mb-4 font-medium">
           {settings?.newArrivalsSubtitle || "JUST DROPPED"}
         </p>
-        <div className="w-12 h-[1px] bg-white/50 mb-4 mx-auto" />
-        <h2 className="text-2xl md:text-3xl font-light text-white mb-6 tracking-tighter">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-8 tracking-wide">
           {settings?.newArrivalsTitle ? (
             settings.newArrivalsTitle
           ) : (
-            "Fresh Styles for Every Mood"
+            <>Fresh Styles <span className="italic">for Every Mood</span></>
           )}
         </h2>
         <Link href="/new">
-          <Button variant="outline" className="border-white text-white hover:bg-white hover:text-black rounded-none px-8 py-4 uppercase tracking-widest text-[10px] transition-colors duration-500">
+          <Button variant="outline" className="border-white/50 text-white hover:bg-white hover:text-black rounded-none px-10 py-6 uppercase tracking-[0.2em] text-[10px] transition-colors duration-500 bg-black/20 backdrop-blur-sm">
             Shop New Arrivals
           </Button>
         </Link>
@@ -71,23 +70,26 @@ export function SplitSaleBanner() {
           />
         )}
       </div>
-      <div className="w-full md:w-1/2 bg-brand-primary flex flex-col items-center justify-center p-6 md:p-10 text-center text-white">
-        <p className="text-brand-luxury uppercase tracking-[0.2em] text-xs font-semibold mb-2">
+      <div className="w-full md:w-1/2 bg-[#1A1A1A] flex flex-col items-center justify-center p-12 md:p-16 lg:p-24 text-center text-white">
+        <p className="text-[#A67C52] uppercase tracking-[0.2em] text-[10px] font-medium mb-6">
           {settings?.promoBannerSubtitle || "LIMITED TIME OFFER"}
         </p>
-        <div className="w-12 h-[1px] bg-brand-luxury mb-4" />
-        <h2 className="text-2xl md:text-3xl font-serif italic mb-4">
-          {settings?.promoBannerTitle || "Elevate Your Everyday Style"}
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif mb-6 leading-tight">
+          {settings?.promoBannerTitle ? (
+            settings.promoBannerTitle
+          ) : (
+            <>Elevate Your <br/><span className="italic">Everyday Style</span></>
+          )}
         </h2>
-        <p className="text-white/70 mb-6 text-xs md:text-sm leading-relaxed max-w-md">
+        <p className="text-white/60 mb-10 text-sm leading-relaxed max-w-sm font-light">
           {settings?.promoBannerDescription || (
             <>
-              Elevate your wardrobe with our premium printed tees. Enjoy up to 30% off selected styles. Use code <span className="text-white font-bold">MOODLIFT30</span> at checkout.
+              Elevate your wardrobe with our premium printed tees. Enjoy up to 30% off selected styles. Use code <span className="text-white font-medium">MOODLIFT30</span> at checkout.
             </>
           )}
         </p>
         <Link href="/sale">
-          <Button className="bg-white text-black hover:bg-brand-luxury hover:text-white rounded-none px-8 py-4 uppercase tracking-widest text-[10px] transition-colors duration-500">
+          <Button className="bg-[#A67C52] hover:bg-[#8B6540] text-white rounded-none px-10 py-6 uppercase tracking-[0.2em] text-[10px] transition-colors duration-500 border-none">
             Shop The Sale
           </Button>
         </Link>

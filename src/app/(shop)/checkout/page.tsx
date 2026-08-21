@@ -6,6 +6,7 @@ import { useCart } from "@/store/useCart";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { settingsService, orderService } from "@/services/db";
+import { CheckCircle } from "lucide-react";
 
 export default function CheckoutPage() {
   const { isLoggedIn, login, user, logout, addresses } = useAuth();
@@ -89,11 +90,16 @@ export default function CheckoutPage() {
   if (isSuccess) {
     return (
       <div className="bg-transparent min-h-screen py-20 px-4 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white border border-[#111111]/10 p-10 text-center">
-          <h2 className="font-serif text-3xl text-[#1F1F1F] mb-4">Thank You</h2>
-          <p className="text-[#6B7280] mb-8">Your order has been placed successfully.</p>
+        <div className="max-w-md w-full bg-white border border-[#111111]/10 p-10 text-center animate-in fade-in zoom-in duration-500 shadow-xl">
+          <div className="flex justify-center mb-6">
+            <div className="h-24 w-24 bg-green-50 rounded-full flex items-center justify-center animate-bounce shadow-sm">
+              <CheckCircle className="h-12 w-12 text-green-500" strokeWidth={1.5} />
+            </div>
+          </div>
+          <h2 className="font-serif text-2xl md:text-3xl text-[#1F1F1F] mb-4 leading-tight">Your order has been successfully placed.</h2>
+          <p className="text-[#6B7280] mb-8 text-sm md:text-base">Thank you for your order!</p>
           <Link href="/shop">
-            <Button className="w-full bg-[#111111] text-white hover:bg-black rounded-none uppercase tracking-widest text-xs py-6">
+            <Button className="w-full bg-[#111111] text-white hover:bg-black hover:text-[#A67C52] transition-colors rounded-none uppercase tracking-widest text-xs py-6">
               Continue Shopping
             </Button>
           </Link>
@@ -119,36 +125,36 @@ export default function CheckoutPage() {
             <form onSubmit={handleAuthSubmit} className="space-y-6">
               {!isLoginMode && (
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name <span className="text-red-500">*</span></label>
                   <input 
                     type="text"
                     required={!isLoginMode}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
+                    className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent"
                     placeholder="Jane Doe"
                   />
                 </div>
               )}
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Email Address</label>
+                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Email Address <span className="text-red-500">*</span></label>
                 <input 
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
+                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent"
                   placeholder="jane@example.com"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Password</label>
+                <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Password <span className="text-red-500">*</span></label>
                 <input 
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] transition-colors bg-transparent"
+                  className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent"
                   placeholder="••••••••"
                 />
               </div>
@@ -184,27 +190,34 @@ export default function CheckoutPage() {
 
             <form onSubmit={handleCheckout} className="space-y-8">
               <div>
-                <h3 className="font-serif text-xl text-[#1F1F1F] mb-6">Shipping Address</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name</label>
-                  <input type="text" name="fullName" defaultValue={defaultAddress?.name || user?.name || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 border-b border-[#111111]/10 pb-4">
+                  <h3 className="font-serif text-xl text-[#1F1F1F] mb-2 md:mb-0">Shipping Address</h3>
                 </div>
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Telephone Number</label>
-                  <input type="tel" name="phone" defaultValue={defaultAddress?.phone || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" placeholder="+1 (555) 000-0000" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
+                <div className="space-y-2 md:col-span-2 relative group">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Full Name <span className="text-red-500">*</span></label>
+                  <input type="text" name="fullName" placeholder="Jane Doe" defaultValue={defaultAddress?.name || user?.name || ""} required className="peer w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent placeholder:text-transparent focus:placeholder:text-gray-400" />
+                  <p className="absolute -bottom-5 left-0 text-[10px] text-red-500 opacity-0 peer-invalid:[&:not(:placeholder-shown)]:opacity-100 transition-opacity">Please enter your full name.</p>
                 </div>
-                <div className="space-y-2 md:col-span-2">
-                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Street Address</label>
-                  <input type="text" name="street" defaultValue={defaultAddress?.street || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                <div className="space-y-2 md:col-span-2 relative group">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Telephone Number <span className="text-red-500">*</span></label>
+                  <input type="tel" name="phone" defaultValue={defaultAddress?.phone || ""} required className="peer w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent placeholder:text-transparent focus:placeholder:text-gray-400" placeholder="+1 (555) 000-0000" />
+                  <p className="absolute -bottom-5 left-0 text-[10px] text-red-500 opacity-0 peer-invalid:[&:not(:placeholder-shown)]:opacity-100 transition-opacity">Please enter a valid phone number.</p>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">City</label>
-                  <input type="text" name="city" defaultValue={defaultAddress?.city || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                <div className="space-y-2 md:col-span-2 relative group">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Street Address <span className="text-red-500">*</span></label>
+                  <input type="text" name="street" placeholder="123 Fashion Ave" defaultValue={defaultAddress?.street || ""} required className="peer w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent placeholder:text-transparent focus:placeholder:text-gray-400" />
+                  <p className="absolute -bottom-5 left-0 text-[10px] text-red-500 opacity-0 peer-invalid:[&:not(:placeholder-shown)]:opacity-100 transition-opacity">Please enter your street address.</p>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Postal Code</label>
-                  <input type="text" name="postalCode" defaultValue={defaultAddress?.postalCode || ""} required className="w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#111111] bg-transparent" />
+                <div className="space-y-2 relative group">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">City <span className="text-red-500">*</span></label>
+                  <input type="text" name="city" placeholder="New York" defaultValue={defaultAddress?.city || ""} required className="peer w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent placeholder:text-transparent focus:placeholder:text-gray-400" />
+                  <p className="absolute -bottom-5 left-0 text-[10px] text-red-500 opacity-0 peer-invalid:[&:not(:placeholder-shown)]:opacity-100 transition-opacity">Please enter your city.</p>
+                </div>
+                <div className="space-y-2 relative group">
+                  <label className="text-xs font-semibold uppercase tracking-widest text-[#1F1F1F]">Postal Code <span className="text-red-500">*</span></label>
+                  <input type="text" name="postalCode" placeholder="10001" defaultValue={defaultAddress?.postalCode || ""} required className="peer w-full border-b border-[#111111]/20 pb-2 pt-1 text-sm focus:outline-none focus:border-[#A67C52] transition-colors bg-transparent placeholder:text-transparent focus:placeholder:text-gray-400" />
+                  <p className="absolute -bottom-5 left-0 text-[10px] text-red-500 opacity-0 peer-invalid:[&:not(:placeholder-shown)]:opacity-100 transition-opacity">Please enter your postal code.</p>
                 </div>
               </div>
             </div>
@@ -235,7 +248,7 @@ export default function CheckoutPage() {
             <Button 
               type="submit" 
               disabled={items.length === 0}
-              className="w-full bg-[#111111] text-white hover:bg-black rounded-none uppercase tracking-widest text-xs py-6"
+              className="w-full bg-[#111111] text-white hover:bg-[#A67C52] transition-colors duration-300 rounded-none uppercase tracking-widest text-xs py-6 mt-8 shadow-md"
             >
               {items.length === 0 ? "Cart is empty" : `Place Order • Rs. ${(items.reduce((acc, item) => acc + (item.price * item.quantity), 0) + shippingFee).toFixed(2)}`}
             </Button>

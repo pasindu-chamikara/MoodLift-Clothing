@@ -75,9 +75,10 @@ export function ProductRow({ title, products: initialProducts }: ProductRowProps
   return (
     <section className="py-12 md:py-16">
       <div className="container mx-auto px-4 max-w-screen-xl">
-        <div className="flex flex-col items-center justify-center mb-10 border-b border-[#eee] pb-4 gap-2 text-center">
-          <h2 className="text-2xl md:text-3xl font-light tracking-tight text-[#222]">{title}</h2>
-          <Link href="/shop" className="text-xs font-semibold uppercase tracking-widest text-[#777] hover:text-[#222] transition-colors">
+        <div className="flex flex-col items-center justify-center mb-16 gap-3 text-center">
+          <h2 className="text-xl md:text-2xl font-serif text-[#1A1A1A] tracking-wide">{title}</h2>
+          <div className="w-8 h-[1px] bg-[#1A1A1A]/20"></div>
+          <Link href="/shop" className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#1A1A1A] hover:text-[#A67C52] transition-colors mt-2">
             View All
           </Link>
         </div>
@@ -92,7 +93,7 @@ export function ProductRow({ title, products: initialProducts }: ProductRowProps
             
             return (
               <Link key={product.id} href={`/product/${product.id}`} className="group block min-w-[50vw] sm:min-w-[40vw] lg:min-w-0 snap-center lg:snap-align-none">
-                <div className="relative aspect-square overflow-hidden bg-[#f5f5f5] mb-4">
+                <div className="relative aspect-[3/4] overflow-hidden bg-[#FCFBFA] mb-6">
                   <Image
                     src={product.imageUrl || "/images/placeholder.jpg"}
                     alt={product.title}
@@ -103,8 +104,8 @@ export function ProductRow({ title, products: initialProducts }: ProductRowProps
                   
                   {/* Badges */}
                   {isOnSale && discountPercentage > 0 && (
-                    <div className="absolute top-2 left-2 bg-[#C9A26B] text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 z-10">
-                      Sale -{discountPercentage}%
+                    <div className="absolute top-2 left-2 bg-black text-white text-[9px] font-medium uppercase tracking-[0.2em] px-3 py-1.5 z-10">
+                      Sale
                     </div>
                   )}
 
@@ -131,12 +132,12 @@ export function ProductRow({ title, products: initialProducts }: ProductRowProps
                   </div>
                 </div>
 
-                <div className="flex flex-col text-center lg:text-left">
-                  <h3 className="text-sm font-medium text-[#222] group-hover:text-[#777] transition-colors line-clamp-1">{product.title}</h3>
-                  <div className="flex items-center gap-2 justify-center lg:justify-start mt-1">
-                    <p className="text-sm text-[#777]">Rs. {Math.round(finalPrice).toLocaleString()}</p>
+                <div className="flex flex-col text-center">
+                  <h3 className="text-[13px] font-medium uppercase tracking-wide text-[#1A1A1A] group-hover:text-[#A67C52] transition-colors line-clamp-1">{product.title}</h3>
+                  <div className="flex items-center gap-3 justify-center mt-2">
+                    <p className="text-sm font-medium text-[#1A1A1A]">Rs. {Math.round(finalPrice).toLocaleString()}</p>
                     {isOnSale && discountPercentage > 0 && (
-                      <p className="text-xs text-[#a0a0a0] line-through">Rs. {Math.round(basePrice).toLocaleString()}</p>
+                      <p className="text-[11px] text-[#999999] line-through">Rs. {Math.round(basePrice).toLocaleString()}</p>
                     )}
                   </div>
                 </div>

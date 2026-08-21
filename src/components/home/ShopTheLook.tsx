@@ -36,15 +36,16 @@ export function ShopTheLook() {
               src={settings?.shopTheLookImage || "/images/crafted.jpg"}
               alt="Crafted for Everyday Confidence"
               fill
+              sizes="(max-width: 768px) 80vw, 33vw"
               className="object-cover"
             />
           </div>
 
           <div className="w-full md:w-7/12 flex flex-col items-center md:items-start text-center md:text-left px-4 md:px-8 md:pl-12 lg:pl-24 mt-10 md:mt-0">
-            <h2 className="text-3xl md:text-5xl font-light text-[#222] mb-6 tracking-tight whitespace-pre-wrap">
+            <h2 className="text-3xl md:text-5xl font-serif text-[#1A1A1A] mb-6 tracking-tight whitespace-pre-wrap">
               {settings?.shopTheLookTitle || "Crafted for Everyday Confidence"}
             </h2>
-            <p className="text-[#1E1E1E] text-base md:text-lg leading-relaxed mb-10 whitespace-pre-wrap">
+            <p className="text-[#444] font-light text-base md:text-lg leading-relaxed mb-10 whitespace-pre-wrap">
               {settings?.shopTheLookDescription || "Our premium women's T-shirts are made from soft, breathable cotton with a relaxed fit designed for all-day comfort. Every stitch is thoughtfully crafted to deliver lasting quality, effortless style, and a flattering silhouette that stays beautiful wash after wash."}
             </p>
             
@@ -57,6 +58,7 @@ export function ShopTheLook() {
                       src={featuredProduct.imageUrl || "/images/placeholder.jpg"}
                       alt={featuredProduct.title}
                       fill
+                      sizes="80px"
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   </div>

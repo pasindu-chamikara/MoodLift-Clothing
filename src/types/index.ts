@@ -35,6 +35,7 @@ export interface Order {
     country: string;
   };
   createdAt?: string | Date | any;
+  adminRead?: boolean;
 }
 
 export interface StoreSettings {

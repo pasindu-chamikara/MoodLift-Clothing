@@ -8,7 +8,8 @@ import {
   updateDoc, 
   deleteDoc, 
   query, 
-  where 
+  where,
+  onSnapshot
 } from "firebase/firestore";
 
 export const dbService = {
@@ -86,8 +87,18 @@ export const orderService = {
     const data = { status, updatedAt: new Date().toISOString() };
     await dbService.updateDocument('orders', id, data);
   },
+  async markOrderAsRead(id: string): Promise<void> {
+    await dbService.updateDocument('orders', id, { adminRead: true });
+  },
   async deleteOrder(id: string): Promise<void> {
     await dbService.deleteDocument('orders', id);
+  },
+  subscribeToOrders(callback: (orders: Order[]) => void) {
+    const q = collection(db, 'orders');
+    return onSnapshot(q, (snapshot) => {
+      const orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Order[];
+      callback(orders);
+    });
   }
 };
 
